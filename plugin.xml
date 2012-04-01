@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.meri.eclipse.defensiveapitools.generatetostring"
+            name="Generate Custom toString">
+      </command>
+      <command
+            id="org.meri.eclipse.defensiveapitools.checknonnullparameter"
+            name="Check Non-Null Parameters">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="true"
+            locationURI="popup:org.eclipse.jdt.ui.source.menu">
+         <separator
+               name="org.meri.eclipse.defensiveapitools.begin"
+               visible="true">
+         </separator>
+         <command
+               commandId="org.meri.eclipse.defensiveapitools.generatetostring"
+               label="Generate Custom toString"
+               style="push">
+         </command>
+         <command
+               commandId="org.meri.eclipse.defensiveapitools.checknonnullparameter"
+               label="Check Non-Null Parameters"
+               style="push">
+         </command>
+         <separator
+               name="org.meri.eclipse.defensiveapitools.end"
+               visible="true">
+         </separator>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.meri.eclipse.defensiveapitools.generatetostring.GenerateToStringHandler"
+            commandId="org.meri.eclipse.defensiveapitools.generatetostring">
+         <enabledWhen>
+           <or>
+             <with variable="activePartId">
+               <equals value="org.eclipse.jdt.ui.CompilationUnitEditor" />
+             </with>
+             <with variable="activeMenuSelection">
+               <iterate ifEmpty="false" operator="and">
+                 <or>
+                   <adapt type="org.eclipse.jdt.core.IType" />
+                   <adapt type="org.eclipse.jdt.core.ICompilationUnit" />
+                 </or>
+               </iterate>
+             </with>
+           </or>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="org.meri.eclipse.defensiveapitools.checknonnullparameter.CheckNonNullParameterHandler"
+            commandId="org.meri.eclipse.defensiveapitools.checknonnullparameter">
+         <enabledWhen>
+           <or>
+             <with variable="activePartId">
+               <equals value="org.eclipse.jdt.ui.CompilationUnitEditor" />
+             </with>
+             <with variable="activeMenuSelection">
+               <iterate ifEmpty="false" operator="and">
+                 <adapt type="org.eclipse.jdt.core.IMethod" />
+               </iterate>
+             </with>
+           </or>
+         </enabledWhen>
+
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="org.meri.eclipse.defensiveapitools.sourcemenu"
+            label="Defensive API Tools "
+            visible="true">
+         <action
+               class="org.meri.eclipse.defensiveapitools.generatetostring.GenerateToStringActionDelegate"
+               id="org.meri.eclipse.defensiveapitools.generatecustomtostring"
+               label="Generate Custom toString"
+               menubarPath="org.eclipse.jdt.ui.source.menu/"
+               style="push">
+         </action>
+         <action
+               class="org.meri.eclipse.defensiveapitools.checknonnullparameter.CheckNonNullParameterActionDelegate"
+               id="org.meri.eclipse.defensiveapitools.checknonnullparameters"
+               label="Check Non-Null Parameters"
+               menubarPath="org.eclipse.jdt.ui.source.menu/"
+               style="push">
+         </action>
+      </actionSet>
+   </extension>
+
+
+</plugin>
